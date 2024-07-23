@@ -1,14 +1,16 @@
 package com.bookstore.jpa.model;
 
 
-import ch.qos.logback.core.boolex.EvaluationException;
+
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_model")
+@Table(name = "TB_BOOK")
 public class BookModel implements Serializable {
     private static final long serialVerisonUID = 1l;
 
@@ -18,6 +20,22 @@ public class BookModel implements Serializable {
 
     @Column(nullable = false, unique = true)
     private String title;
+
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    private PublisherModel publisher;
+
+    @OneToMany
+    @JoinTable(name = "tb_book_author",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<AuthorModel> authors = new HashSet<>();
+
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
+    private ReviewModel review;
+
+
 
     public BookModel() {
 
@@ -40,7 +58,31 @@ public class BookModel implements Serializable {
         return title;
     }
 
+    public PublisherModel getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(PublisherModel publisher) {
+        this.publisher = publisher;
+    }
+
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<AuthorModel> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<AuthorModel> authors) {
+        this.authors = authors;
+    }
+
+    public ReviewModel getReview() {
+        return review;
+    }
+
+    public void setReview(ReviewModel review) {
+        this.review = review;
     }
 }
