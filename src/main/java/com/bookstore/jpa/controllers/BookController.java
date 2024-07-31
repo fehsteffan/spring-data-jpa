@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/bookstore/books")
@@ -21,6 +23,11 @@ public class BookController {
     public BookController(BookService bookService) {
         this.bookService = bookService;
     }
+
+    public ResponseEntity<List<BookModel>> getAllBooks() {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
+    }
+
 
     @PostMapping
     public ResponseEntity<BookModel> saveBook(@RequestBody BookRecordDto bookRecordDto) {
